@@ -1,17 +1,15 @@
-#import the tools
 import streamlit as st
 import pandas as pd
 import newspaper
 from textblob import TextBlob
-from PIL import Image # help us fetch and open images from the internet
-import requests    # help us fetch and open images from the internet
-from io import BytesIO  # help us fetch and open images from the internet
+from PIL import Image
+import requests
+from io import BytesIO
 import pytesseract
-import syllapy  #counts how many syllables are in words
+import syllapy
 
-#setting up
-st.set_page_config(page_title="Sentiment Analysis-NLP", page_icon="📊", layout="wide") #browser tab
-st.title("Sentiment Analysis") #for webpage
+st.set_page_config(page_title="Sentiment Analysis-NLP", page_icon="📊", layout="wide")
+st.title("Sentiment Analysis")
 
 # Function to perform sentiment analysis on text
 def perform_sentiment_analysis(text):
@@ -35,9 +33,10 @@ def extract_text_from_image_url(image_url):
         print(f"Error extracting text from the image URL. Error details: {e}")
         return None
 
-df = pd.read_csv("SearchEngine_Dataset.csv", encoding='latin1').fillna("") #encoding=“Read special letters correctly.”
+# Connect to the Excel Sheet
+df = pd.read_csv("SearchEngine_Dataset.csv", encoding='latin1').fillna("")
 
-# Keyword recommendations for dropdown
+# Keyword recommendations
 keyword_recommendations = {
     "Climate": ["Climate Change", "Climate Science", "Climate Policy", "Climate Global warming","Climate Solution"],
     "Global": ["Global Warming", "Happening Climate Change", "Global Effect", "Global Poverty"],
@@ -53,14 +52,13 @@ keyword_recommendations = {
 # Dropdown box for both search and keyword recommendations
 search_term = st.selectbox("Select a term to search or a recommended keyword", list(keyword_recommendations.keys()))
 recommended_keywords = keyword_recommendations.get(search_term, [])
-# Filter the dataframe based on search or recommended keyword.
-# Checks if the chosen word is present in Title OR Keywords in the dataset.
-#Collects only those matching rows.
+
+# Filter the dataframe based on search or recommended keyword
 m1 = df["Title"].str.contains(search_term)
 m2 = df["Keywords"].str.contains(search_term)
 df_search = df[m1 | m2]
 
-#It shows results as cards in rows of 3.Each card displays an article’s info.
+# Display the filtered results
 N_cards_per_row = 3
 for n_row, row in df_search.reset_index().iterrows():
     i = n_row % N_cards_per_row
@@ -68,19 +66,17 @@ for n_row, row in df_search.reset_index().iterrows():
         st.write("---")
         cols = st.columns(N_cards_per_row, gap="large")
 
-#filling each card
-with cols[n_row % N_cards_per_row]:
-    st.caption(f"{row['Category'].strip()} - {row['Date'].strip()} ")
-    st.markdown(f"**{row['Title'].strip()}**")
-    st.markdown(f"*{row['Description'].strip()}*")
-    st.markdown(f"**{row['URL']}**")
+    with cols[n_row % N_cards_per_row]:
+        st.caption(f"{row['Category'].strip()} - {row['Date'].strip()} ")
+        st.markdown(f"**{row['Title'].strip()}**")
+        st.markdown(f"*{row['Description'].strip()}*")
+        st.markdown(f"**{row['URL']}**")
 
-#Adds a button for each article saying “Analyse”.
-#If clicked, it fetches the article’s URL.
-if st.button(f"Analyse_{n_row}"):
-    url = row['URL']
+        # Add Analyse button
+        if st.button(f"Analyse_{n_row}"):
+            url = row['URL']
 
-    if url.endswith(('jpg', 'jpeg', 'png', 'gif')):
+            if url.endswith(('jpg', 'jpeg', 'png', 'gif')):
                 extracted_text = extract_text_from_image_url(url)
                 if extracted_text:
                     polarity, subjectivity,word_counts,complex_word,syllable,personal = perform_sentiment_analysis(extracted_text)
@@ -92,7 +88,7 @@ if st.button(f"Analyse_{n_row}"):
                     st.bar_chart(df)
                 else:
                     st.write("Text extraction failed. Please check the image URL and try again.")
-    else:
+            else:
                 article = newspaper.Article(url)
                 article.download()
                 article.parse()
@@ -104,6 +100,3 @@ if st.button(f"Analyse_{n_row}"):
                 df = pd.DataFrame([polarity, subjectivity, word_counts, complex_word, syllable, personal])
                 df.index=['polarity', 'subjectivity', 'word_counts', 'complex_word', 'syllable', 'personal']
                 st.bar_chart(df)
-
-
-
