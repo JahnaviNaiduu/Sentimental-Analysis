@@ -1,0 +1,5 @@
+
+{
+  "name": "Social Media Analysis Dashboard",
+  "description": "A responsive web application to display and analyze social media posts from a FastAPI backend. It features post filtering, sentiment analysis visualization with charts, and a modern, clean user interface."
+}

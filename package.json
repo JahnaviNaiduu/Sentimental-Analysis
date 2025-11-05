@@ -1,0 +1,21 @@
+{
+  "name": "sentimental-analysis",
+  "version": "1.0.0",
+  "description": "Streamlit tool for sentiment analysis on text/images with visualizations. Uses pytesseract and newspaper3k.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JahnaviNaiduu/Sentimental-Analysis.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/JahnaviNaiduu/Sentimental-Analysis/issues"
+  },
+  "homepage": "https://github.com/JahnaviNaiduu/Sentimental-Analysis#readme"
+}
