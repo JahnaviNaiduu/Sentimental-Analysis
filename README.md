@@ -1,7 +1,7 @@
 # Sentiment-Analysis-Web-Application-using-Streamlit
 Streamlit tool for sentiment analysis on text/images with visualizations. Uses pytesseract and newspaper3k.
 
-Developer : KeerthiKeswaran
+Developer :Jahnavi Naidu
 
 The Sentiment Analysis-NLP Tool is a web application built using Newspaper3k and Pytesseract, designed to analyze sentiment in textual content. The tool incorporates various functionalities to facilitate sentiment analysis on both text and images.
 
